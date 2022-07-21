@@ -1,0 +1,61 @@
+.trisTable .sapUiTableTr {
+    display: inline-block;
+}
+
+.trisTable .sapUiTableTr .sapUiTableCellInner {
+    padding: 0;
+    margin: 0;
+}
+
+.trisTable .sapUiTableTr > td,
+.trisTable .sapUiTableTr > td.sapUiTableTdFirst,
+.trisTable .sapUiTableCell,
+.trisTable .sapUiTableTr > td.sapUiTableTdFirst > .sapUiTableCell
+{
+    padding: 0;
+    margin: 0;
+    border: none;
+    width: 25px;
+    height: 25px;
+}
+
+.trisTable .sapUiTableCell .sapUiIcon {
+    padding: 0;
+    margin: 0;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 28px;
+}
+
+.trisTable .sapUiIcon[data-block-type='0'] {
+    color: lightgrey;
+}
+
+.trisTable .sapUiIcon[data-block-type=I] {
+    color: crimson;
+}
+
+.trisTable .sapUiIcon[data-block-type=O] {
+    color: limegreen;
+}
+
+.trisTable .sapUiIcon[data-block-type=L] {
+    color: coral;
+}
+
+.trisTable .sapUiIcon[data-block-type=T] {
+    color: dodgerblue;
+}
+
+.trisTable .sapUiIcon[data-block-type=J] {
+    color: darkturquoise;
+}
+
+.trisTable .sapUiIcon[data-block-type=S] {
+    color: gold;
+}
+
+.trisTable .sapUiIcon[data-block-type=Z] {
+    color: fuchsia;
+}

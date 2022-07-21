@@ -1,0 +1,146 @@
+<mvc:View controllerName="seesharpsoft.tabtris.controller.GameBoard"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:table="sap.ui.table"
+          xmlns:core="sap.ui.core"
+>
+
+    <HBox justifyContent="Center" alignItems="Center" class="sapUiMediumMargin">
+        <VBox class="sapUiMediumMargin">
+            <Label text="Score: {tetris>/score}" />
+            <Label text="Lines: {tetris>/lines}" />
+        </VBox>
+        <VBox>
+            <HBox class="sapUiTinyMargin" justifyContent="Center" alignItems="Center">
+                <Title text="Tabtris" class="sapUiTinyMarginEnd" titleStyle="H1" />
+            </HBox>
+
+            <HBox class="sapUiTinyMarginEnd" justifyContent="Center" alignItems="Center">
+                <Title text="powered by " class="sapUiTinyMarginEnd" titleStyle="H3" />
+                <Link text="OpenUI5 Table" href="https://openui5.hana.ondemand.com/#/api/sap.ui.table.Table" target="_blank" />
+            </HBox>
+
+            <HBox class="sapUiTinyMarginEnd" justifyContent="Center" alignItems="Center">
+                <Title text="Author: " class="sapUiTinyMarginEnd" titleStyle="H6" />
+                <Link text="Martin Sommer" href="https://github.com/SeeSharpSoft/UI5_Tabtris" target="_blank" />
+            </HBox>
+
+            <table:Table rows="{tetris>/board/rows}"
+                         visibleRowCount="20"
+                         columnHeaderVisible="false"
+                         selectionMode="None"
+                         enableColumnReordering="false"
+                         enableColumnFreeze="true"
+                         selectionBehavior="Row"
+                         class="trisTable"
+                         rowHeight="25px"
+                         width="252px"
+            >
+                <table:columns>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/0/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/0/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/1/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/1/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/2/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/2/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/3/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/3/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/4/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/4/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/5/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/5/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/6/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/6/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/7/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/7/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/8/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/8/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                    <table:Column width="25px">
+                        <table:template>
+                            <core:Icon src="{= ${tetris>columns/9/type} === '0' ? 'sap-icon://border' : 'sap-icon://color-fill'}">
+                                <core:customData>
+                                    <core:CustomData key="block-type" value="{tetris>columns/9/type}" writeToDom="true" />
+                                </core:customData>
+                            </core:Icon>
+                        </table:template>
+                    </table:Column>
+                </table:columns>
+            </table:Table>
+
+            <HBox alignItems="Center">
+                <Button text="{= ${tetris>/state} === 'New' ? 'Start' : 'Restart' }" press="onPressStart" class="sapUiTinyMargin"></Button>
+                <Button text="{= ${tetris>/state} === 'Paused' ? 'Resume' : 'Pause' }" press="onPressPause" class="sapUiTinyMargin"></Button>
+                <Text text="{= ${tetris>/state} === 'Ended' ? 'Game over' : (${tetris>/state} === 'Paused' ? '- Pause -' : 'Have fun!' ) }" />
+            </HBox>
+        </VBox>
+
+        <!--<List headerText="Highscores" items="{path: 'highscore>/scores', sorter: [{path: 'score', descending: true}]}" width="300px" class="sapUiMediumMargin">-->
+        <!--    <items>-->
+        <!--        <DisplayListItem label="{highscore>name}" value="Lines: {highscore>lines} - Score: {highscore>score}" />-->
+        <!--    </items>-->
+        <!--</List>-->
+    </HBox>
+</mvc:View>
