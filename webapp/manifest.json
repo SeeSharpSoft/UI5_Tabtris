@@ -71,11 +71,6 @@
 			"compact": true,
 			"cozy": true
 		},
-		"models": {
-			"i18n": {
-				"type": "sap.ui.model.resource.ResourceModel"
-			}
-		},
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
@@ -99,17 +94,6 @@
 					"title": "Tabtris"
 				}
 			}
-		},
-		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
 		}
-	},
-	"sap.platform.hcp": {
-		"uri": "webapp",
-		"_version": "1.1.0"
 	}
 }
