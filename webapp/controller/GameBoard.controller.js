@@ -4,8 +4,8 @@ sap.ui.define([
     "jquery.sap.global",
     "sap/ui/core/mvc/Controller",
     "../model/TrisModel",
-    "sap/ui/model/json/JSONModel"
-], function (jQuery, BaseController, TrisModel, JSONModel) {
+    "../constants/GameState"
+], function (jQuery, BaseController, TrisModel, GameState) {
     "use strict";
 
     jQuery.sap.includeStyleSheet(jQuery.sap.getModulePath("seesharpsoft.tabtris", "/themes/base/GameBoard.css"));
@@ -13,18 +13,6 @@ sap.ui.define([
     var oController = BaseController.extend("seesharpsoft.tabtris.controller.GameBoard", {
         onInit: function() {
             this.getView().setModel(new TrisModel(), "tetris");
-
-            var oModel = new JSONModel();
-            this.getView().setModel(oModel, "highscore");
-            oModel.setProperty("/", {
-                scores: [
-                    {
-                        name: "Todo",
-                        score: 1000,
-                        lines: 42
-                    }
-                ]
-            });
 
             document.addEventListener("keydown", this._keyPressed.bind(this), false);
         },
@@ -40,7 +28,7 @@ sap.ui.define([
         onPressPause: function(oEvent) {
             var oModel = this.getView().getModel("tetris");
 
-            if(oModel.getProperty("/state") === "Paused") {
+            if(oModel.getProperty("/state") === GameState.PAUSED) {
                 oModel.unpauseGame();
             } else {
                 oModel.pauseGame();
@@ -48,8 +36,6 @@ sap.ui.define([
         },
 
         _keyPressed: function(e) {
-            e = e || window.event;
-
             if (e.keyCode == '38') {
                 this.getView().getModel("tetris").blockRotateLeft();
             }

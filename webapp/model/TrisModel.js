@@ -2,8 +2,9 @@
 
 sap.ui.define([
     "jquery.sap.global",
-    "sap/ui/model/json/JSONModel"
-], function (jQuery, BaseModel) {
+    "sap/ui/model/json/JSONModel",
+    "../constants/GameState"
+], function (jQuery, BaseModel, GameState) {
     "use strict";
 
     if (!window.requestAnimationFrame) { // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -22,13 +23,6 @@ sap.ui.define([
         NO_OF_COLUMNS: 10,
 
         INITIAL_SPEED: 800.0,
-
-        GAME_STATE: {
-            NEW: "New",
-            RUNNING: "Running",
-            PAUSED: "Paused",
-            ENDED: "Ended"
-        },
 
         BLOCK: {
             EMPTY: "0",
@@ -89,7 +83,7 @@ sap.ui.define([
         constructor: function() {
             var vResult = BaseModel.call(this, arguments);
             
-			this.setDefaultBindingMode("OneWay");
+            this.setDefaultBindingMode("OneWay");
             this.init();
 
             return vResult;
@@ -98,29 +92,19 @@ sap.ui.define([
         init: function() {
             var oData = {
                 board: {
-                    rows: []
+                    rows: Array(this.NO_OF_ROWS).fill({ columns: this._getEmptyRow() })
                 },
                 score: 0,
                 lines: 0,
                 block: this.createNewBlock(),
-                state: this.GAME_STATE.NEW
+                state: GameState.NEW
             };
-
-            for(var rows = 0; rows < this.NO_OF_ROWS; ++rows) {
-                oData.board.rows.push({ columns: this._getEmptyRow() });
-            }
 
             this.setData(oData);
         },
 
         _getEmptyRow: function() {
-            var aResult = [];
-            for(var columns = 0; columns < this.NO_OF_COLUMNS; ++columns) {
-                aResult.push({
-                    type: this.BLOCK.EMPTY
-                });
-            }
-            return aResult;
+            return Array(this.NO_OF_COLUMNS).fill({ type: this.BLOCK.EMPTY});
         },
 
         getBoard: function(bOriginal) {
@@ -154,19 +138,17 @@ sap.ui.define([
             var oBoard = this.getBoard(),
                 iRemovedLines = 0;
 
+            // use traditional for-loop, cause oBoard.rows is altered for good within
             for(var rows = 0; rows < this.NO_OF_ROWS; ++rows) {
                 var oRow = oBoard.rows[rows],
                     bHasGap = false;
-                for(var columns = 0; columns < this.NO_OF_COLUMNS; ++columns) {
-                    if(oRow.columns[columns].type == this.BLOCK.EMPTY) {
-                        bHasGap = true;
-                        break;
-                    };
-                }
+
+                bHasGap = oRow.columns.some((column) => column.type === this.BLOCK.EMPTY);
+
                 // full line
                 if(!bHasGap) {
                     oBoard.rows.splice(rows, 1);
-                    oBoard.rows.unshift({ columns: this._getEmptyRow()});
+                    oBoard.rows.unshift({ columns: this._getEmptyRow() });
                     ++iRemovedLines;
                 }
             }
@@ -187,11 +169,9 @@ sap.ui.define([
             }
             if((iTick - this._iLastTick) > this._fSpeed) {
                 this._iLastTick = iTick;
-                if(!this.blockDown()) {
-                    if(!this.nextBlock()) {
-                        this.endGame();
-                        return;
-                    }
+                if(!this.blockDown() && !this.nextBlock()) {
+                    this.endGame();
+                    return;
                 }
             }
             if(!this._bStop) {
@@ -216,7 +196,7 @@ sap.ui.define([
         startGame: function() {
             this._bStop = false;
             this.init();
-            this.setProperty("/state", this.GAME_STATE.RUNNING);
+            this.setProperty("/state", GameState.RUNNING);
             this.nextBlock();
             this._fSpeed = this.INITIAL_SPEED;
             this._tick();
@@ -224,28 +204,28 @@ sap.ui.define([
 
         endGame: function() {
             this._bStop = true;
-            this.setProperty("/state", this.GAME_STATE.ENDED);
+            this.setProperty("/state", GameState.ENDED);
         },
 
         pauseGame: function() {
-            if(this.getProperty("/state") !== this.GAME_STATE.RUNNING) {
+            if(this.getProperty("/state") !== GameState.RUNNING) {
                 return;
             }
             this._bStop = true;
-            this.setProperty("/state", this.GAME_STATE.PAUSED);
+            this.setProperty("/state", GameState.PAUSED);
         },
 
         unpauseGame: function() {
-            if(this.getProperty("/state") !== this.GAME_STATE.PAUSED) {
+            if(this.getProperty("/state") !== GameState.PAUSED) {
                 return;
             }
             this._bStop = false;
-            this.setProperty("/state", this.GAME_STATE.RUNNING);
+            this.setProperty("/state", GameState.RUNNING);
             this._tick();
         },
 
         _removeBlockFromBoard: function(oBoard, oBlock) {
-            if(!oBlock || oBlock.type == this.BLOCK.EMPTY) {
+            if(!oBlock || oBlock.type === this.BLOCK.EMPTY) {
                 return false;
             }
             var x, y, iBlockRotation, iSingleBlockPosition;
@@ -257,7 +237,7 @@ sap.ui.define([
 
                 if(x < 0 || x >= this.NO_OF_COLUMNS ||
                     y < 0 || y >= this.NO_OF_ROWS ||
-                    oBoard.rows[y].columns[x].type != oBlock.type)
+                    oBoard.rows[y].columns[x].type !== oBlock.type)
                 {
                     jQuery.sap.log.error("inconsistent board in _removeBlockFromBoard");
                     return false;
@@ -269,12 +249,12 @@ sap.ui.define([
         },
 
         _setBlockOnBoard: function(oBoard, oBlock) {
-            if(!oBlock || oBlock.type == this.BLOCK.EMPTY) {
+            if(!oBlock || oBlock.type === this.BLOCK.EMPTY) {
                 jQuery.sap.log.error("block is EMPTY");
                 return false;
             }
             var x, y, iBlockRotation, iSingleBlockPosition;
-            for(var i=0; i < 4; ++i) {
+            for(var i = 0; i < 4; ++i) {
                 iBlockRotation = this.BLOCK_POSITION[oBlock.type][oBlock.rotation];
                 iSingleBlockPosition = (0xF & (iBlockRotation >> 4*i));
                 x = oBlock.posX + (iSingleBlockPosition % 4);
@@ -282,7 +262,7 @@ sap.ui.define([
 
                 if(x < 0 || x >= this.NO_OF_COLUMNS ||
                    y < 0 || y >= this.NO_OF_ROWS ||
-                   oBoard.rows[y].columns[x].type != this.BLOCK.EMPTY)
+                   oBoard.rows[y].columns[x].type !== this.BLOCK.EMPTY)
                {
                    jQuery.sap.log.debug("field " + x + ";" + y + " outside range or occupied");
                    return false;
@@ -296,7 +276,7 @@ sap.ui.define([
         _tryChangeBlock: function(fnBlockCallback) {
             var oBlock = this.getBlock();
 
-            if(oBlock == this.BLOCK.EMPTY) {
+            if(oBlock === this.BLOCK.EMPTY) {
                 return false;
             }
 
